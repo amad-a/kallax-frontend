@@ -28,32 +28,51 @@ export default {
     library: {
         type: Array
     },
-    displayedRelease: {
-        type: Number
-    },
-    releases: {
-        type: Array
-    },
+  },
+
+  data() {
+    // eslint-disable-next-line no-unused-vars
+    return {
+      releases: [],
+      displayed_release: 0,
+      }
   },
 
 
   methods: {
 
-    addRelease(){
-      this.$emit('add-release');
-    },
-
     addToLibrary(){
-      this.$emit('add-to-library');
+      this.$emit('add-to-library', this.releases[this.displayed_release]);
     },
 
     nextRelease(){
-      this.$emit('next-release');
+      if (this.displayed_release !== this.releases.length - 1){
+        this.displayed_release += 1;
+      }
+      console.log(this.displayed_release)
     },
 
     previousRelease(){
-      this.$emit('previous-release');
+      if (this.displayed_release > 0){
+        this.displayed_release -= 1;
+      }
+      console.log(this.displayed_release)
     },
+
+    async addRelease(release){
+
+      const title = release.title;
+      const artist = release.artist;
+      const search_request = `http://localhost:1000/search/?artist=${artist}&title=${title}`;
+      const result = await fetch(search_request);
+      let releaseData = await result.json();
+      this.releases = []
+      this.displayed_release = 0;
+    
+      releaseData.forEach(element => {
+        this.releases.push(element)
+      });
+    }
    
   }
 }

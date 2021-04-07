@@ -1,42 +1,32 @@
 <template>
   <div>
-    <search-form @search-submitted="addRelease"></search-form>
-    <div>
-    <img v-if="releases.length !== 0" :src="releases[displayed_release].img" >
-    <p v-if="releases.length !== 0">{{ releases[displayed_release].artist}}</p>
-    <p v-if="releases.length !== 0">{{ releases[displayed_release].title}}</p>
-    </div>
-  <div>
-   <button @click="previousRelease">prev</button>
-   <button @click="nextRelease">next</button>
-   <button @click="addToLibrary">add</button>
-  </div>
-  <div>{{ library }}</div>
+    <add-release-view :library="library" 
+                      @add-to-library="addToLibrary"/>
  </div>
 </template>
 
 <script>
-import SearchForm from './components/searchForm.vue'
+import AddReleaseView from './components/AddReleaseView.vue'
 
 export default {
   name: 'App',
   components: {
-    SearchForm
+    AddReleaseView,
   },
 
   data() {
     // eslint-disable-next-line no-unused-vars
     return {
-      releases: [],
-      displayed_release: 0,
+      //releases: [],
+      //displayed_release: 0,
       library: [],
       }
   },
 
   methods: {
 
-    async addToLibrary(){
-      const link = this.releases[this.displayed_release]?.link;
+    async addToLibrary(release){
+      const link = release?.link;
       if (link){
         const release_page_request = `http://localhost:1000/scrape/?link=${link}`;
         const result = await fetch(release_page_request);
@@ -45,44 +35,8 @@ export default {
       }
     },
 
-    nextRelease(){
-      if (this.displayed_release !== this.releases.length - 1){
-        this.displayed_release += 1;
-      }
-      console.log(this.displayed_release)
-    },
-
-    previousRelease(){
-      if (this.displayed_release > 0){
-        this.displayed_release -= 1;
-      }
-      console.log(this.displayed_release)
-    },
-
-    async addRelease(release){
-
-      const title = release.title;
-      const artist = release.artist;
-      const search_request = `http://localhost:1000/search/?artist=${artist}&title=${title}`;
-      const result = await fetch(search_request);
-      let releaseData = await result.json();
-
-      this.releases = []
-      this.displayed_release = 0;
-    
-      releaseData.forEach(element => {
-        this.releases.push(element)
-        //console.log(element)
-      });
-      
-      //this.releases = releaseData
-      
-      //console.log(releaseData);
-      
-      //console.log("hey");
+   
   }
-}
-
 }
  
 </script>

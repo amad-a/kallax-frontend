@@ -1,7 +1,16 @@
 <template>
+  
   <div>
-    <add-release-view :library="library" 
+    <nav> 
+      <div @click="set_page('add')">add</div>
+      <div @click="set_page('library')">library</div>
+      <div @click="set_page('explore')">explore</div>
+      <div @click="set_page('collections')">collections</div>
+    </nav>
+    
+    <add-release-view v-if="current_page === 'add'" :library="library" 
                       @add-to-library="addToLibrary"/>
+   
  </div>
 </template>
 
@@ -17,13 +26,17 @@ export default {
   data() {
     // eslint-disable-next-line no-unused-vars
     return {
-      //releases: [],
-      //displayed_release: 0,
       library: [],
+      current_page: "library",
       }
   },
 
   methods: {
+
+    set_page(page){
+      this.current_page = page;
+      console.log(this.current_page)
+    },
 
     async addToLibrary(release){
       const link = release?.link;

@@ -1,27 +1,22 @@
 <template>
   <div>
-    <search-form @search-submitted="addRelease"></search-form>
-    <div>
-    <img v-if="releases.length !== 0" :src="releases[displayed_release].img" >
-    <p v-if="releases.length !== 0">{{ releases[displayed_release].artist}}</p>
-    <p v-if="releases.length !== 0">{{ releases[displayed_release].title}}</p>
-    </div>
-  <div>
-   <button @click="previousRelease">prev</button>
-   <button @click="nextRelease">next</button>
-   <button @click="addToLibrary">add</button>
-  </div>
-  <div>{{ library }}</div>
+    <add-release-view :library="library" 
+                 :displayed-release="displayed_release"
+                 :releases="releases"
+                 @add-release="addRelease"
+                 @add-to-library="addToLibrary"
+                 @next-release="nextRelease"
+                 @previous-release="previousRelease"/>
  </div>
 </template>
 
 <script>
-import SearchForm from './components/searchForm.vue'
+import AddReleaseView from './components/AddReleaseView.vue'
 
 export default {
   name: 'App',
   components: {
-    SearchForm
+    AddReleaseView,
   },
 
   data() {
@@ -66,23 +61,14 @@ export default {
       const search_request = `http://localhost:1000/search/?artist=${artist}&title=${title}`;
       const result = await fetch(search_request);
       let releaseData = await result.json();
-
       this.releases = []
       this.displayed_release = 0;
     
       releaseData.forEach(element => {
         this.releases.push(element)
-        //console.log(element)
       });
-      
-      //this.releases = releaseData
-      
-      //console.log(releaseData);
-      
-      //console.log("hey");
+    }
   }
-}
-
 }
  
 </script>

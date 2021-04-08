@@ -11,7 +11,6 @@
    <button @click="nextRelease">next</button>
    <button @click="addToLibrary">add</button>
   </div>
-  <div>{{ library }}</div>
  </div>
 </template>
 
@@ -42,7 +41,12 @@ export default {
   methods: {
 
     addToLibrary(){
+      if (this.library.some(release => release.id === this.releases[this.displayed_release].link)){
+        console.log('error, release already in library')
+      }
+      else {
       this.$emit('add-to-library', this.releases[this.displayed_release]);
+      }
     },
 
     nextRelease(){

@@ -5,37 +5,56 @@
       <div @click="set_page('add')">add</div>
       <div @click="set_page('library')">library</div>
       <div @click="set_page('explore')">explore</div>
-      <div @click="set_page('collections')">collections</div>
+      <div @click="set_page('playlists')">playlists</div>
     </nav>
     
-    <add-release-view v-if="current_page === 'add'" :library="library" 
-                      @add-to-library="addToLibrary"/>
-   
+    <add-release-view 
+      v-show="current_page === 'add'" 
+      :library="library" 
+      @add-to-library="addToLibrary"/>
+    <library-view 
+      v-show="current_page === 'library'" 
+      :library="library"
+      @delete="deleteRelease"/>
+    <playlists-view 
+      v-show="current_page === 'playlists'" 
+      :library="library" 
+      :collections="collections"/>
  </div>
 </template>
 
 <script>
 import AddReleaseView from './components/AddReleaseView.vue'
+import LibraryView from './components/LibraryView.vue'
+import PlaylistsView from './components/PlaylistsView.vue'
 
 export default {
   name: 'App',
   components: {
     AddReleaseView,
+    LibraryView,
+    PlaylistsView,
   },
 
   data() {
     // eslint-disable-next-line no-unused-vars
     return {
       library: [],
+      collections: [],
       current_page: "library",
       }
   },
 
   methods: {
 
+    deleteRelease(id){
+      this.library = this.library.filter((release) => {
+        release.id !== id
+      })
+    },
+
     set_page(page){
       this.current_page = page;
-      console.log(this.current_page)
     },
 
     async addToLibrary(release){

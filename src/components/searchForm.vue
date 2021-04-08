@@ -5,7 +5,7 @@
         <input id="artist" v-model="artist">
         <label for="title" >title:</label>
         <input id="title" v-model="title">
-    <input class="button" type="submit" value="Submit">
+    <input class="button" type="submit" value="Search">
 
 
     </form>

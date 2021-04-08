@@ -2,10 +2,10 @@
   
   <div>
     <nav> 
-      <div @click="set_page('add')">add</div>
-      <div @click="set_page('library')">library</div>
-      <div @click="set_page('explore')">explore</div>
-      <div @click="set_page('playlists')">playlists</div>
+      <div @click="setPage('add')">add</div>
+      <div @click="setPage('library')">library</div>
+      <div @click="setPage('explore')">explore</div>
+      <div @click="setPage('playlists')">playlists</div>
     </nav>
     
     <add-release-view 
@@ -48,12 +48,17 @@ export default {
   methods: {
 
     deleteRelease(id){
-      this.library = this.library.filter((release) => {
-        release.id !== id
+
+      let tempLibrary = this.library;
+      tempLibrary = tempLibrary.filter((release) => {
+        return (release.id !== id);
       })
+      
+      console.log(tempLibrary)
+      this.library = tempLibrary;
     },
 
-    set_page(page){
+    setPage(page){
       this.current_page = page;
     },
 

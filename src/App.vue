@@ -19,7 +19,8 @@
     <playlists-view 
       v-show="current_page === 'playlists'" 
       :library="library" 
-      :collections="collections"/>
+      :collections="collections"
+      @collection-added="addCollection"/>
  </div>
 </template>
 
@@ -41,20 +42,22 @@ export default {
     return {
       library: [],
       collections: [],
-      current_page: "library",
+      genres: [],
+      current_page: "add",
       }
   },
 
   methods: {
 
-    deleteRelease(id){
+    addCollection(newCollection){
+      this.collections.push(newCollection)
+    },
 
+    deleteRelease(id){
       let tempLibrary = this.library;
       tempLibrary = tempLibrary.filter((release) => {
         return (release.id !== id);
       })
-      
-      console.log(tempLibrary)
       this.library = tempLibrary;
     },
 

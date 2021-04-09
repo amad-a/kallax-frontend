@@ -7,9 +7,9 @@
     <p v-if="releases.length !== 0">{{ releases[displayed_release].title}}</p>
     </div>
   <div>
-   <button @click="previousRelease">prev</button>
-   <button @click="nextRelease">next</button>
-   <button @click="addToLibrary">add</button>
+   <button v-if="displayed_release !== 0" @click="previousRelease">prev</button>
+   <button v-if="displayed_release < releases.length - 1" @click="nextRelease">next</button>
+   <button v-if="releases.length !== 0" @click="addToLibrary">add</button>
   </div>
  </div>
 </template>
@@ -53,14 +53,12 @@ export default {
       if (this.displayed_release !== this.releases.length - 1){
         this.displayed_release += 1;
       }
-      console.log(this.displayed_release)
     },
 
     previousRelease(){
       if (this.displayed_release > 0){
         this.displayed_release -= 1;
       }
-      console.log(this.displayed_release)
     },
 
     async addRelease(release){

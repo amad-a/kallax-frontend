@@ -34,6 +34,7 @@ export default {
     return {
       releases: [],
       displayed_release: 0,
+      error: false,
       }
   },
 
@@ -43,6 +44,7 @@ export default {
     addToLibrary(){
       if (this.library.some(release => release.id === this.releases[this.displayed_release].link)){
         console.log('error, release already in library')
+        //error = true;
       }
       else {
       this.$emit('add-to-library', this.releases[this.displayed_release]);

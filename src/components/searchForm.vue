@@ -5,9 +5,7 @@
         <input id="artist" v-model="artist">
         <label for="title" >title:</label>
         <input id="title" v-model="title">
-    <input class="button" type="submit" value="Search">
-
-
+        <input class="button" type="submit" value="Search">
     </form>
 </template>
 
@@ -22,6 +20,7 @@ export default {
 
     methods: {
         onSubmit() {
+            if (this.artist || this.title){
             let searchData = {
                 artist: this.artist,
                 title: this.title
@@ -30,9 +29,11 @@ export default {
             console.log(searchData);
             
             this.artist = ''
-            this.rating = ''
-    }
-}   }
+            this.title = ''
+            }
+        }
+    }   
+}
 
 </script>
 

@@ -2,7 +2,7 @@
   <div>
     <div v-for="release in library" :key="release.title">
         <input type="checkbox" :id="release.id" :value="release" v-model="added" />
-        <label :for="release.id">{{ release.release}}</label>
+        <label :for="release.id">{{release.artist}} - {{release.release}}</label>
     </div>
     <form @submit.prevent="onSubmit">
         <label for="name">name:</label>

@@ -1,10 +1,18 @@
 <template>
-  <div>
+  <div class="app-wrapper">
+    <div class="app-title">kallax</div>
     <div class="nav-wrapper">
-      <div class="nav-button" @click="setPage('add')">add</div>
-      <div class="nav-button" @click="setPage('library')">library</div>
-      <div class="nav-button" @click="setPage('explore')">explore</div>
-      <div class="nav-button" @click="setPage('playlists')">playlists</div>
+      <div v-if="current_page === 'add'" class="nav-button-active" @click="setPage('add')">add</div>
+      <div v-else class="nav-button" @click="setPage('add')">add</div>
+
+      <div v-if="current_page === 'library'" class="nav-button-active" @click="setPage('library')">library</div>
+      <div v-else class="nav-button" @click="setPage('library')">library</div>
+  
+      <div v-if="current_page === 'view' || current_page === 'create'" class="nav-button-active" @click="setPage('view')">lists</div>
+      <div v-else class="nav-button" @click="setPage('view')">lists</div>
+
+      <div v-if="current_page === 'explore'" class="nav-button-active" @click="setPage('explore')">explore</div>
+      <div v-else class="nav-button" @click="setPage('explore')">explore</div>
     </div>
     
     <add-release-view
@@ -17,13 +25,18 @@
       @delete="deleteRelease"
       @sort="sortLibrary"/>
     <playlists-view 
-      v-show="current_page === 'playlists'" 
+      v-show="current_page === 'create'" 
       :library="library" 
       :collections="collections"
-      @collection-added="addCollection"/>
-    <public-view 
-      v-show="current_page === 'explore'" 
+      @collection-added="addCollection"
+      @toggle="setPage"/>
+    <playlists-browse 
+      v-show="current_page === 'view'" 
       :library="library" 
+      :collections="collections"
+      @toggle="setPage"/>
+    <public-view 
+      v-show="current_page === 'explore'"
       :recently_added="recently_added"/>
     
  </div>
@@ -34,6 +47,7 @@ import AddReleaseView from './components/AddReleaseView.vue'
 import LibraryView from './components/LibraryView.vue'
 import PlaylistsView from './components/PlaylistsView.vue'
 import PublicView from './components/PublicView.vue'
+import PlaylistsBrowse from './components/PlaylistsBrowse.vue'
 
 export default {
   name: 'App',
@@ -41,7 +55,8 @@ export default {
     AddReleaseView,
     LibraryView,
     PlaylistsView,
-    PublicView
+    PlaylistsBrowse,
+    PublicView,
   },
 
   data() {
@@ -50,12 +65,19 @@ export default {
       library: [],
       collections: [],
       genres: [],
-      current_page: "add",
       recently_added: [],
+      current_page: "add",
       }
   },
 
   methods: {
+
+    pageCheck(page){
+      if (page === this.current_page){
+        return true;
+      }
+      return false;
+    },
 
     sortLibrary(order){
       if (order === "artist"){
@@ -96,7 +118,7 @@ export default {
     },
 
     async fetchRecent(){
-      const query = `http://localhost:1000/recent`;
+      const query = `http://localhost:9999/recent`;
       const db_request = await fetch(query)
       const parsed_recents = await db_request.json();
       console.log(parsed_recents)
@@ -106,7 +128,7 @@ export default {
     async addToLibrary(release){
       const link = release?.link;
       if (link){
-        const release_page_request = `http://localhost:1000/scrape/?link=${link}`;
+        const release_page_request = `http://localhost:9999/scrape/?link=${link}&label=${release.label}`;
         const result = await fetch(release_page_request);
         const resultData = await result.json();
         this.library.push(resultData);
@@ -128,12 +150,16 @@ export default {
     sortGenre(){
         this.library.sort((a,b) => ((a.genre[0].toLowerCase() > b.genre[0].toLowerCase()) ? 1 : (a.genre[0].toLowerCase() < b.genre[0].toLowerCase()) ? -1 : 0));
     },
+    sortDateAdded(){
+        this.library.sort((a,b) => (new Date(a.date_added) - new Date(b.date_added)));
+    },
   },
 
   mounted() {
     if (localStorage.storedLibrary) {
       this.library = JSON.parse(localStorage.getItem('storedLibrary'));
-      //console.log(test)
+      //localStorage.removeItem('storedLibrary');
+      //localStorage.removeItem('storedCollections');
       console.log("lib loaded")
     }  
     if (localStorage.storedCollections) {
@@ -141,29 +167,73 @@ export default {
       console.log("collections loaded")
     }  
   },
-  
 }
- 
 </script>
 
 <style>
+
+:root {
+  background-color: #FFF8BB;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'IBM Plex Mono', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: black;
+  margin: 10px;
+}
+
+.app-wrapper {
+  padding: 0px;
+  margin: 0px;
 }
 
 .nav-wrapper {
+  padding-bottom: 5px;
+  margin: 5px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr)
+}
+
+.app-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: italic;
+  font-size: 22px;
+  padding: 5px;
 }
 
 .nav-button {
   padding: 0px;
   margin: 0px;
+  font-size: 20px;
+  font-family: 'Inconsolata', monospace;  font-weight: 600;
+  text-align: center;
+}
+
+.nav-button-active {
+  padding: 0px;
+  margin: 0px;
+  font-size: 20px;
+  font-family: 'Inconsolata', monospace;  font-weight: 800;
+  text-decoration: underline;
+  text-align: center;
+}
+
+.nav-button:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@media (min-width: 480px) {
+
+  .app-wrapper {
+  padding: 0px;
+  margin: 0px;
+  width: 480px; 
+  align-content: center;
+  }
+  
 }
   
 </style>

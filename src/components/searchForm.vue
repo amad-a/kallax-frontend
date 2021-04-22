@@ -1,7 +1,6 @@
 <template>
     <div class="wrapper">
         <form class="search-form" @submit.prevent="onSubmit">
-            
             <div class="wrapper2">
             <input class="artist-input" id="artist" placeholder=" artist" v-model="artist">
             <input class="release-input" id="title" placeholder="  release" v-model="title">
@@ -29,7 +28,6 @@ export default {
                 } 
             this.$emit('search-submitted', searchData)
             console.log(searchData);
-            
             this.artist = ''
             this.title = ''
             }
@@ -43,7 +41,7 @@ export default {
 
 .wrapper {
     padding: 0px;
-   
+    background-color: transparent;
     margin: 20px 0px 0px 0px;
 }
 
@@ -54,6 +52,7 @@ export default {
     padding: 3px;
     column-gap: 12px;
     row-gap: 12px;
+    background-color: transparent;
 }
 
 .artist-input{
@@ -63,6 +62,7 @@ export default {
   grid-column-end: 5;
   grid-row-start: 1;
   grid-row-end: 2;
+  background-color: transparent;
 }
 
 .release-input{
@@ -71,6 +71,7 @@ export default {
   grid-column-end: 5;
   grid-row-start: 2;
   grid-row-end: 3;
+  background-color: transparent;
 }
 
 .search-button{
@@ -81,11 +82,13 @@ export default {
   grid-row-start: 1;
   grid-row-end: 3;
   font-size: 25px;
+  background-color: transparent;
 }
 
 .search-button:hover {
     background-color: black;
     cursor: pointer;
+    background-color: transparent;
 }
 
 </style>

@@ -4,18 +4,17 @@
       no releases added yet.
     </div>
     <div v-show="view === 'list'" class="library">
-    <div class="sort">sort by:
-      <button @click="sortLibrary('artist')">A-Z (artists)</button>
-      <button @click="sortLibrary('release')">A-Z (releases)</button>
-      <button @click="sortLibrary('year')">Year</button>
-      <button @click="sortLibrary('genre')">Genre</button>
+    <div class="sort">
+      <div class="label">sort by:</div> 
+      <button class="sort-artist" @click="sortLibrary('artist')">A-Z (artists)</button>
+      <button class="sort-release" @click="sortLibrary('release')">A-Z (releases)</button>
+      <button class="sort-year" @click="sortLibrary('year')">Year</button>
+      <button class="sort-genre" @click="sortLibrary('genre')">Genre</button>
     </div>
       <div class="list-container">
-      <div v-for="release in library" :key="release.title">
-        <li class="release-view" @click="setRelease(release)">
+        <div class="release-view" v-for="release in library" :key="release.id" @click="setRelease(release)">
           <div class="artist">{{ release.artist }}</div> 
           <div class="release">{{ release.release }}</div>
-        </li>
         </div>
       </div> 
     </div>
@@ -95,16 +94,28 @@ export default {
     }
   },
 
+  computed: {
+    filteredList() {
+      return this.library.filter(release => {
+        return release.release.toLowerCase().includes(this.search.toLowerCase()) || release.artist.toLowerCase().includes(this.search.toLowerCase())
+      })
+    }
+  }
+
 }
 
 </script>
 
 <style scoped>
-.item {
-  border-style: solid;
-  border-color: black;
-  border-width: 3px;
-  width: 500px;
+
+
+.label {
+  padding: 5px;
+  text-align: center;
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 1;
 }
 
 .list-container {
@@ -119,6 +130,7 @@ export default {
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: auto;
   border-bottom: 2px solid black;
+  text-align: left;
 }
 
 .release-view:hover {
@@ -127,25 +139,87 @@ export default {
   background-color: black;
 }
 
-.sort {
-  border: 2px solid black;  
+.artist {
+  padding: 0px 0px 10px 10px;
+  grid-column-start: 1;
+  grid-column-end: 5;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  font-family: 'Inconsolata', monospace;
+  font-weight: 400;
+  
 }
 
-.artist {
+.release {
   font-size: 1.6em;
   padding: 10px;
   grid-column-start: 1;
   grid-column-end: 5;
   grid-row-start: 1;
   grid-row-end: 1;
+  font-family: 'Inconsolata', monospace;
+  font-weight: 600;
 }
 
-.release {
-  padding: 0px 0px 10px 10px;
+.sort {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
+  border-width: 2px 2px 0px 2px;
+  border-style: solid;
+  border-color: black;  
+}
+
+
+
+.sort-artist {
+  margin: 2px;
   grid-column-start: 1;
-  grid-column-end: 5;
+  grid-column-end: 1;
   grid-row-start: 2;
   grid-row-end: 2;
 }
+.sort-year {
+  margin: 2px;
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 2; 
+}
+.sort-release {
+  margin: 2px;
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+.sort-genre {
+  margin: 2px;
+  grid-column-start: 4;
+  grid-column-end: 4;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.sort-genre, 
+.sort-year, 
+.sort-release, 
+.sort-artist {
+  border: 2px solid black;
+  margin: 5px;
+  background-color: transparent;
+}
+
+.sort-genre:hover, 
+.sort-year:hover, 
+.sort-release:hover, 
+.sort-artist:hover {
+  border: 2px solid black;
+  margin: 5px;
+  background-color: black;
+  color: white;
+}
+
+
 
 </style>

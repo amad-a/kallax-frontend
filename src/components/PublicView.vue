@@ -1,6 +1,7 @@
 <template>
 <div>
-  {{ recently_added }}
+  <library-view 
+    :library="recently_added"/>
 </div>
 </template>
     
@@ -8,18 +9,14 @@
 
 <script>
 
-
-
+import LibraryView from './LibraryView.vue'
 export default {
   name: 'PublicView',
   components: {
-    //ReleaseView,
+    LibraryView,
   },
 
   props: {
-    library: {
-      type: Array
-    },
     recently_added: {
       type: Array
     }

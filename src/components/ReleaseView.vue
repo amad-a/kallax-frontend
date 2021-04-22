@@ -1,21 +1,39 @@
 <template>
-<div>
+<div class="app-wrapper">
   <div class="header">
       <div button="back-button" @click="back()">←</div>
       <div class="title">{{ release.release }}</div>
   </div>
+
   <div class="list-container">
-    
       <img class="cover" v-if="release.image" :src="release.image">
-      <h3>{{ release.artist }} / {{ release.year }}</h3>
-      <h4>genres: </h4>
-      <ul v-for="genre in release.genre" v-bind:key="genre">
-          {{ genre }}
-      </ul>
-      <ul v-for="track in release.tracks" v-bind:key="track">
-          {{ track.name }} - {{ convert(track.duration) }}
-      </ul>
-      <p>date added: {{release.date_added}}</p>
+      <div class="page-wrapper">
+          <div class="artist-container">
+              <div class="info-title">artist:</div>
+              <div class="info-content">{{ release.artist }}</div>
+          </div>
+          <div class="date-container">
+            <div class="info-title">released:</div>
+            <div class="info-content">{{ release.year }}</div>
+          </div>
+          <div class="label-container">
+              <div class="info-title">label:</div>
+              <div class="info-content">{{ release.label }}</div>
+          </div>
+          <div class="genre-container">
+              <div class="info-title">genre:</div>
+              <div class="info-content">{{ release.genre }}</div>
+          </div>
+      </div>
+      &nbsp;
+      <div class="tracklist-label">tracklist:</div>
+      <div class="tracklist-container" v-for="track in release.tracks" :key="track">
+          <div class="track-name">{{ track.position }} - {{ track.title }}</div>
+          <div class="track-duration">{{ track.duration }}</div>
+      </div>
+      
+      
+      <p>added to library on: {{release.date_added}}</p>
       <a target="_blank" rel="noopener noreferrer" v-bind:href="url">find on youtube</a>
   </div>
 </div>
@@ -31,7 +49,7 @@ export default {
 
   props: {
     release: {
-        type: Array
+        type: Object
     },
   },
 
@@ -45,55 +63,151 @@ export default {
   computed: {
       url(){
         return `https://www.youtube.com/results?search_query=${encodeURIComponent(this.release.artist+' '+this.release.release)}`; 
-      }
+      },
+
   },
 
 
   methods: {
-
       back(){
           this.$emit('back')
+          console.log(this.release.tracks)
       },
-
-      convert(timestamp){
-          let duration = "";
-          let seconds = timestamp.substring(7,9)
-          let minutes = timestamp.substring(4,6)
-          let hours = timestamp.substring(2,3)
-
-          if (hours !== "0"){
-            duration.concat('', hours)
-          }
-          duration.concat('',`${minutes}:${seconds}`)
-          console.log(duration)
-          return duration;
-      }
   }
 }
  
 </script>
 
 <style scoped>
+
+p {
+    font-family: 'News Cycle', sans-serif;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.info-title {
+    font-size: 1em;
+    text-align: left;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    font-family: 'Inconsolata', monospace;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.tracklist-label {
+    border-bottom: 2px dotted black;
+    text-align: left;
+    padding: 5px;
+    padding-left: 10px;
+    font-size: 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.info-content {
+    font-size: 1.5em;
+    text-align: left;
+    font-family: 'Inconsolata', monospace;
+    background-color: transparent;
+}
+
+.page-wrapper {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: 100%;
+    padding: 10px;
+    background-color: transparent;
+}
+
+.tracklist-container {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: 100%;
+    padding: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 20px;
+    border-bottom: 2px solid black;
+    font-family: 'IBM Plex Mono', monospace;
+    background-color: transparent;
+}
+
+.track-name {
+    grid-column-start: 1;
+    grid-column-end: 7;
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    background-color: transparent;
+}
+
+.track-duration {
+    grid-column-start: 8;
+    grid-column-end: 9;
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    background-color: transparent;
+}
+
+.artist-container {
+  grid-column-start: 1;
+  grid-column-end: 5;  
+  grid-row-start: 1;
+  grid-row-end: 1;  
+  background-color: transparent;
+}
+
+.date-container {
+    grid-column-start: 5;
+    grid-column-end: 8;  
+    grid-row-start: 1;
+    grid-row-end: 1;  
+    background-color: transparent;
+}
+
+.label-container {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    background-color: transparent;
+}
+
+.genre-container {
+    grid-column-start: 5;
+    grid-column-end: 8;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    background-color: transparent;
+}
+
 .item {
   border-style: solid;
   border-color: black;
   border-width: 3px;
   width: 500px;
+  background-color: transparent;
 }
 
 .list-container {
     border: 2px solid black;  
     overflow: scroll;
     height: 80vh;
+    background-color: transparent;
 }
 
 .cover {
     width: 85vw;
-    padding-top: 20px;
+    margin-top: 10px;
+    background-color: transparent;
+    border: 2px solid black;
 }
 
 .container {
     width: auto;
+    background-color: transparent;
 }
 
 .header {
@@ -103,13 +217,24 @@ export default {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     padding: 10px 0px 10px 0px;
+    font-family: 'Inconsolata', monospace;
+    font-weight: bold;
+    background-color: transparent;
+
 }
 
 .title {
     grid-column-start: 2;
     grid-column-end: 8;
+    background-color: transparent;
 }
 
-.back-button {}
+@media (min-width: 480px) {
+  .cover {
+  width: 450px; 
+  align-content: center;
+  }
+}
+
 
 </style>

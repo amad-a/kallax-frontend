@@ -76,7 +76,6 @@ export default {
       url(){
         return `https://www.youtube.com/results?search_query=${encodeURIComponent(this.release.artist+' '+this.release.release)}`; 
       },
-
   },
 
 
@@ -126,6 +125,7 @@ p {
     text-align: left;
     padding: 5px;
     padding-left: 10px;
+    margin-top: 30px;
     font-size: 20px;
     font-family: 'IBM Plex Mono', monospace;
     font-weight: bold;

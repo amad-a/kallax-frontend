@@ -28,7 +28,7 @@
             @click="setRelease(release)">
           <div class="artist">{{ release.artist }}</div> 
           <div class="release">{{ release.release }}</div>
-          <div v-if="option === 'explore'" class="date-added">added {{ release.date_added }}</div>
+          <div v-if="option === 'explore'" class="date-added">added {{ timestamp(release.date_added) }}</div>
         </div>
       </div> 
     </div>
@@ -44,8 +44,8 @@
   // <button @click="deleteRelease(release.id)">X</button>
 
 import ReleaseView from './ReleaseView.vue'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en'
+//import TimeAgo from 'javascript-time-ago'
+//import en from 'javascript-time-ago/locale/en'
 
 export default {
   name: 'LibraryView',
@@ -75,10 +75,20 @@ export default {
   methods: {
 
     timestamp(date) {
-      TimeAgo.addDefaultLocale(en);
-      const timeAgo = new TimeAgo('en-US')
-      timeAgo.format(date - 24 * 60 * 60 * 1000)
-      return timeAgo;
+      //TimeAgo.addDefaultLocale(en);
+      //const timeAgo = new TimeAgo('en-US')
+      let elapsed = (Date.now() - Date.parse(date)) / (1000*60*60*24);
+      let elapsed_days = Math.floor(elapsed)
+      let elapsed_hours = Math.floor((Date.now() - Date.parse(date)) / (1000*60*60));
+      //console.log(Math.floor(elapsed))
+
+      if (elapsed < 1){
+        return elapsed_hours + ' hours ago'
+      } 
+      else if (elapsed_days === 1){
+        return elapsed_days + " day ago"
+      }
+      return elapsed_days + " days ago"
       },
 
     goBack(){
@@ -208,13 +218,14 @@ export default {
 }
 
 .date-added {
-  padding: 0px 0px 10px 10px;
+  padding: 0px 10px 10px 10px;
   grid-column-start: 4;
-  grid-column-end: 6;
+  grid-column-end: 7;
   grid-row-start: 2;
   grid-row-end: 2;
   font-family: 'Inconsolata', monospace;
   font-weight: 400;
+  text-align: right;
 }
 
 

@@ -82,11 +82,13 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  overflow-x: hidden;
 }
 
 .container {
   border: 2px solid black;
   height: 82.5vh;
+  overflow-x: hidden;
 }
 
 .button-inactive {
@@ -102,7 +104,7 @@ export default {
 }
 
 .releases-container {
-  overflow: scroll;
+  overflow-y: scroll;
   height: 60vh;
   border-width: 0px 0px 2px 0px;
   border-style: solid;
@@ -137,7 +139,7 @@ export default {
   border-bottom: 2px solid black;
   text-align: left;
   background-color: #FFF8BB;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .check {

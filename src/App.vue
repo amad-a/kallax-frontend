@@ -23,7 +23,9 @@
       v-show="current_page === 'library'" 
       :library="library"
       @delete="deleteRelease"
-      @sort="sortLibrary"/>
+      @sort="sortLibrary"
+      @add="addFromExplore"
+      option="library"/>
     <playlists-view 
       v-show="current_page === 'create'" 
       :library="library" 
@@ -37,7 +39,10 @@
       @toggle="setPage"/>
     <public-view 
       v-show="current_page === 'explore'"
-      :recently_added="recently_added"/>
+      :recently_added="recently_added"
+      @add="addFromExplore"
+      />
+
     
  </div>
 </template>
@@ -92,6 +97,9 @@ export default {
       else if (order === "genre"){
         this.sortGenre();
       }
+      else if (order === "date_added"){
+        this.sortDateAdded();
+      }
     },
 
     addCollection(newCollection){
@@ -100,6 +108,7 @@ export default {
     },
 
     deleteRelease(id){
+      console.log(id)
       let tempLibrary = this.library;
       tempLibrary = tempLibrary.filter((release) => {
         return (release.id !== id);
@@ -125,14 +134,30 @@ export default {
       this.recently_added = parsed_recents;
     },
 
+    addFromExplore(checkRelease) {
+
+      if (this.library.some(release => release.id === checkRelease.id)){
+        console.log('error, release already in library')
+        //error = true;
+      }
+      else {
+        checkRelease.date_added = Date()
+        this.library.push(checkRelease);
+        localStorage.storedLibrary = JSON.stringify(this.library)
+      }
+    },
+
     async addToLibrary(release){
       const link = release?.link;
       if (link){
         const release_page_request = `http://localhost:9999/scrape/?link=${link}&label=${release.label}`;
         const result = await fetch(release_page_request);
         const resultData = await result.json();
+        console.log("DATA: "+resultData)
         this.library.push(resultData);
         localStorage.storedLibrary = JSON.stringify(this.library)
+
+        
 
       }
     },
@@ -151,7 +176,7 @@ export default {
         this.library.sort((a,b) => ((a.genre[0].toLowerCase() > b.genre[0].toLowerCase()) ? 1 : (a.genre[0].toLowerCase() < b.genre[0].toLowerCase()) ? -1 : 0));
     },
     sortDateAdded(){
-        this.library.sort((a,b) => (new Date(a.date_added) - new Date(b.date_added)));
+        this.library.sort((a,b) => (-(new Date(a.date_added) - new Date(b.date_added))));
     },
   },
 
@@ -181,7 +206,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: black;
-  margin: 10px;
+  margin: 5px;
 }
 
 .app-wrapper {
@@ -200,7 +225,7 @@ export default {
   font-family: 'IBM Plex Mono', monospace;
   font-style: italic;
   font-size: 22px;
-  padding: 5px;
+  padding: 4px;
 }
 
 .nav-button {
@@ -224,6 +249,42 @@ export default {
   text-decoration: underline;
   cursor: pointer;
 }
+
+.div {
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  background: transparent;
+  border-color: black;
+  border-width: 2px;
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-color: black;
+  
+ 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: black;
+  border-color: black;
+  border-width: 6px;
+
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: black;
+  border-color: black;
+  border-width: 6px;
+  
+}
+
 
 @media (min-width: 480px) {
 

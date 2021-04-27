@@ -32,14 +32,23 @@
           <div class="track-duration">{{ track.duration }}</div>
       </div>
       
-      
       <p>added to library on: {{release.date_added}}</p>
-      <a target="_blank" rel="noopener noreferrer" v-bind:href="url">find on youtube</a>
+        <br>
+      <a class="delete-button" target="_blank" rel="noopener noreferrer" v-bind:href="url">find on youtube</a>
+      <div v-show="option === 'library'" class="delete-button" @click="deleteFromLibrary()">delete from library</div>
+      <div v-show="option === 'explore'" class="delete-button" @click="addToLibrary()">add to library</div>
+      <br>
   </div>
 </div>
 </template>
 
 <script>
+
+//options: library view - delete button DONE
+//options: collections view - delete from collection TODO
+//options: explore view - add to library TODO
+
+//explore tab - get rid of sorting buttons, add timestamps, and add releaseview (+ add to library button)
 
 export default {
   name: 'ReleaseView',
@@ -51,6 +60,9 @@ export default {
     release: {
         type: Object
     },
+    option: {
+        type: String
+    }
   },
 
   data() {
@@ -73,6 +85,19 @@ export default {
           this.$emit('back')
           console.log(this.release.tracks)
       },
+      checkOption(){
+          console.log("OPTION: " + this.option)
+          return this.option;
+      },
+      deleteFromLibrary(){
+          //console.log(this.release.id)
+          const id = this.release.id;
+          this.$emit('delete', id)
+          this.$emit('back')
+      },
+      addToLibrary(){
+          this.$emit('add', this.release)
+      }
   }
 }
  
@@ -116,9 +141,10 @@ p {
 
 .page-wrapper {
     display: grid;
+    gap: 5px;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: 100%;
-    padding: 10px;
+    padding: 12px;
     background-color: transparent;
 }
 
@@ -193,8 +219,9 @@ p {
 
 .list-container {
     border: 2px solid black;  
-    overflow: scroll;
-    height: 80vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 78vh;
     background-color: transparent;
 }
 
@@ -220,13 +247,29 @@ p {
     font-family: 'Inconsolata', monospace;
     font-weight: bold;
     background-color: transparent;
-
 }
 
 .title {
     grid-column-start: 2;
     grid-column-end: 8;
     background-color: transparent;
+}
+
+.delete-button {
+    border: 2px solid black;
+    text-align: center;
+    font-size: 20px;
+    width: auto;
+    margin: 30px;
+    padding: 10px;
+    align-items: center;
+}
+
+.delete-button:hover {
+    border: 2px solid black;
+    background-color: black;
+    font-size: 20px;
+    color: #FFF8BB;
 }
 
 @media (min-width: 480px) {

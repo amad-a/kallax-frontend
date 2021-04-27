@@ -1,7 +1,7 @@
 <template>
 <div>
   <library-view 
-    :library="recently_added"/>
+    :library="recently_added" option="explore" @add="add"/>
 </div>
 </template>
     
@@ -21,6 +21,14 @@ export default {
       type: Array
     }
   },
+  
+  methods: {
+    add(release){
+      this.$emit('add', release);
+      console.log('release locked and loaded')
+    }
+    
+  }
 }
 
 </script>

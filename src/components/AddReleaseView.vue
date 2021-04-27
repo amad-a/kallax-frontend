@@ -137,14 +137,13 @@ export default {
   overflow-y: scroll;
 }
 
-.cover-add{
+.cover-add {
   grid-column-start: 2;
   grid-column-end: 8;  
   grid-row-start: 2;
   grid-row-end: 7;  
   width: 100%;
   border: 2px solid black;
-  
 }
 
 .artist-add {
@@ -183,6 +182,7 @@ export default {
   color: black;
   background-color: white;
   width: 80%;
+  padding: 5px;
   align-items: center;
   grid-column-start: 2;
   grid-column-end: 3;  
@@ -196,7 +196,6 @@ export default {
   grid-column-end: 4;  
   grid-row-start: 9;
   grid-row-end: 10;  
-  
 }
 
 .nav:hover {

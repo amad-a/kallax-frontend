@@ -1,36 +1,31 @@
 <template>
-<div class="outer-wrapper-lists"> 
-<div v-if="page_view === 'list'">
+  <div class="outer-wrapper-lists"> 
+    <div v-if="page_view === 'list'">
       <div class="toggle-view">
         <div class="button-active" @click="setPage('view')">browse lists</div>
         <div class="button-inactive" @click="setPage('create')">create list</div>
       </div>
-  <div class="container-browse" v-bind:style="{ backgroundImage: 'url(' + clouds + ')' }">
+    <div class="container-browse" v-bind:style="{ backgroundImage: 'url(' + clouds + ')' }">
       <div class="collections-wrapper" >
         <div class="collection-box" v-for="collection in collections" :key="collection" @click="setActiveCollection(collection)">
           <div class="collection-title">{{ collection.title }}</div>
         </div>
       </div>
     </div>
-
-    
-
- 
   </div>
-
   <div class="playlist-loaded" v-show="page_view === 'active'">
-      <div class="header">
-        <div button="back-button" @click="goBack">←</div>
-        <div class="title">{{ active_collection.title }}</div>
+    <div class="header">
+      <div button="back-button" @click="goBack">←</div>
+      <div class="title">{{ active_collection.title }}</div>
+    </div>
+    <div class="list-container">
+      <div class="release-view" v-for="release in active_collection.list" :key="release.id">
+        <div class="artist">{{ release.artist }}</div> 
+        <div class="release">{{ release.release }}</div>
       </div>
-      <div class="list-container">
-        <div class="release-view" v-for="release in active_collection.list" :key="release.id">
-          <div class="artist">{{ release.artist }}</div> 
-          <div class="release">{{ release.release }}</div>
-        </div>
-      </div> 
-    </div>
-    </div>
+    </div> 
+  </div>
+</div>
 </template>
 
 <script>
@@ -93,12 +88,13 @@ export default {
 
 .container-browse {
   height: 77.5vh;
-  overflow: scroll;
+  overflow-y: scroll;
   border-width: 2px;
 }
 
 .outer-wrapper-lists {
   border: 2px solid black;
+  overflow: hidden;
 }
 
 .button-inactive {
@@ -235,6 +231,7 @@ export default {
 
   .collections-wrapper {
   grid-template-columns: 1fr 1fr 1fr;
+  overflow: hidden;
   }
   
 }

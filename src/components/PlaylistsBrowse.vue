@@ -1,5 +1,10 @@
 <template>
+<div>
+<div v-if="page_view === 'release'"> 
+          <release-view :release="currentRelease" @back="goBackToCollection()" :option="'lists'"></release-view>
+    </div>
   <div class="outer-wrapper-lists"> 
+    
     <div v-if="page_view === 'list'">
       <div class="toggle-view">
         <div class="button-active" @click="setPage('view')">browse lists</div>
@@ -19,21 +24,25 @@
       <div class="title">{{ active_collection.title }}</div>
     </div>
     <div class="list-container">
-      <div class="release-view" v-for="release in active_collection.list" :key="release.id">
+      <div class="release-view" v-for="release in active_collection.list" :key="release.id" @click="setView(release)" @back="goBack">
         <div class="artist">{{ release.artist }}</div> 
         <div class="release">{{ release.release }}</div>
       </div>
+      <div class="delete-list" @click="deleteList(active_collection.id)">delete list </div>
     </div> 
   </div>
+</div>
 </div>
 </template>
 
 <script>
 
+import ReleaseView from './ReleaseView.vue'; 
+
 export default {
   name: 'PlaylistsView',
   components: {
-  
+    ReleaseView
   },
 
   props: {
@@ -51,6 +60,7 @@ export default {
       added: [],
       name: '',
       page_view: 'list',
+      currentRelease: '',
       active_collection: [],
       clouds: 'clouds-dithered.png'
     }
@@ -62,14 +72,29 @@ export default {
       this.$emit('toggle', option)
     },
 
+    setView(release){
+      this.currentRelease = release;
+      console.log(this.currentRelease)
+      this.page_view = 'release'
+    },
+
     setActiveCollection(collection) {
       this.active_collection = collection;
       this.page_view = 'active';
     },
 
+    goBackToCollection(){
+      this.page_view = 'active';
+    }, 
+
     goBack(){
-      this.active_collection = '';
       this.page_view = 'list';
+      this.active_collection = '';
+    },
+
+    deleteList(id){
+      this.$emit('delete-list', id)
+      this.goBack()
     }
 }
 }
@@ -119,7 +144,6 @@ export default {
 
 .playlist-loaded {
   background-color: #FFF8BB;
-
 }
 
 .collection-box {
@@ -165,6 +189,18 @@ export default {
   border-bottom: 2px solid black;
   text-align: left;
   background-color: #FFF8BB;
+}
+
+.delete-list {
+  padding: 10px;
+  margin: 20px 50px 20px 50px;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.delete-list:hover {
+  background-color: black;
+  color: #FFF8BB;
 }
 
 .release-view:hover {

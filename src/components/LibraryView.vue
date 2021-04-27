@@ -28,7 +28,11 @@
             @click="setRelease(release)">
           <div class="artist">{{ release.artist }}</div> 
           <div class="release">{{ release.release }}</div>
-          <div v-if="option === 'explore'" class="date-added">added {{ timestamp(release.date_added) }}</div>
+           <div v-if="option === 'explore' || sortOption === 'date_added'" class="date-added">added {{ timestamp(release.date_added) }}</div>
+          <div v-if="sortOption === 'artist' " class="date-added">{{ release.artist[0]}}</div>
+          <div v-if="sortOption === 'year'" class="date-added">{{ release.year }}</div>
+          <div v-if="sortOption === 'genre'" class="date-added">{{ release.genre }}</div>
+          <div v-if="sortOption === 'release'" class="date-added">{{ release.release[0] }}</div>
         </div>
       </div> 
     </div>
@@ -67,6 +71,7 @@ export default {
       displayed_release: '',
       view: "list",
       message: '',
+      sortOption: 'date_added'
 
     }
   },
@@ -100,6 +105,7 @@ export default {
     },
 
     sortLibrary(button){
+      this.sortOption = button;
       this.$emit('sort', button)
     },
     

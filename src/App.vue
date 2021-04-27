@@ -36,7 +36,8 @@
       v-show="current_page === 'view'" 
       :library="library" 
       :collections="collections"
-      @toggle="setPage"/>
+      @toggle="setPage"
+      @delete-list="deleteCollection"/>
     <public-view 
       v-show="current_page === 'explore'"
       :recently_added="recently_added"
@@ -107,6 +108,17 @@ export default {
       localStorage.storedCollections = JSON.stringify(this.collections)
     },
 
+    deleteCollection(id){
+      if (id) {
+        let tempCollections = this.collections;
+        tempCollections = tempCollections.filter((collection) => {
+          return (collection.id !== id);
+        })
+        this.collections = tempCollections;
+        localStorage.storedCollections = JSON.stringify(this.collections)
+      }
+    },
+
     deleteRelease(id){
       console.log(id)
       let tempLibrary = this.library;
@@ -155,6 +167,7 @@ export default {
         const resultData = await result.json();
         console.log("DATA: "+resultData)
         this.library.push(resultData);
+        this.sortLibrary('date_added')
         localStorage.storedLibrary = JSON.stringify(this.library)
 
         

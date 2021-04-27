@@ -22,6 +22,8 @@
 
 <script>
 
+import { v4 as uuid } from 'uuid';
+
 export default {
   name: 'PlaylistsView',
   components: {
@@ -61,6 +63,7 @@ export default {
         let newCollection = {
           title: this.name,
           list: this.added,
+          id: uuid(),
         }
         this.$emit('collection-added', newCollection);
         this.name = '';

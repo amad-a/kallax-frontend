@@ -147,7 +147,7 @@ export default {
     },
 
     async fetchRecent(){
-      const query = `http://localhost:9999/recent`;
+      const query = `https://kallaxapp.herokuapp.com/recent`;
       const db_request = await fetch(query)
       const parsed_recents = await db_request.json();
       console.log(parsed_recents)
@@ -170,7 +170,7 @@ export default {
     async addToLibrary(release){
       const link = release?.link;
       if (link){
-        const release_page_request = `http://localhost:9999/scrape/?link=${link}&label=${release.label}`;
+        const release_page_request = `https://kallaxapp.herokuapp.com/scrape/?link=${link}&label=${release.label}`;
         const result = await fetch(release_page_request);
         const resultData = await result.json();
         console.log("DATA: "+resultData)

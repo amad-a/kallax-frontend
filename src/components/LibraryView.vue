@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div v-show="library.length === 0" class="empty-library">
-      no releases added yet.
-    </div>
+    
 
     <div v-show="view === 'list'" class="library">
       
@@ -23,6 +21,9 @@
 
     
       <div class="list-container">
+        <div class="empty-library" v-show="library.length === 0">
+            no releases added yet.
+        </div>
         <div class="release-view" v-for="release in library" 
             :key="release.id" 
             @click="setRelease(release)">
@@ -166,6 +167,10 @@ export default {
   grid-column-end: 2;
   grid-row-start: 1;
   grid-row-end: 1;
+}
+
+.empty-library {
+  padding: 20px;
 }
 
 .explore-title {

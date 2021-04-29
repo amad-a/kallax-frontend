@@ -25,9 +25,13 @@
      ipod and mp3 players, and the practice of record collecting (kallax 
      refers to kallax shelving unit from IKEA, a popular choice to house 
      Vinyl among aspiring record collectors).
+
      <img src="kallax.png" alt="kallax">
+                <button @click="$emit('delete-library')">{{ check() }}</button>
+
      <h2>how-to-use:</h2>
      <br> &nbsp; <br>
+     
      
 
    </div>
@@ -61,6 +65,16 @@ export default {
 
 
   methods: {
+
+    check(){
+      if (this.library.length === 0){
+        return "library is empty."
+      }
+      else {
+        return "delete library"
+      }
+    },
+
     addToLibrary(){
       if (this.library.some(release => release.id === this.releases[this.displayed_release].link)){
         console.log('error, release already in library')
@@ -132,6 +146,7 @@ export default {
   border: 2px solid black;
   display: grid;
   padding: 20px;
+  width: auto;
   height: 60vh;
   margin-top: 20px;
   overflow-y: scroll;

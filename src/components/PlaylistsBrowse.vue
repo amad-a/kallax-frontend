@@ -144,6 +144,7 @@ export default {
 
 .playlist-loaded {
   background-color: #FFF8BB;
+  
 }
 
 .collection-box {
@@ -179,6 +180,7 @@ export default {
     border-width: 0px 0px 2px 0px;
     border-style: solid;
     border-color: black;
+    overflow-x: hidden;
 }
 
 .release-view {
@@ -189,6 +191,7 @@ export default {
   border-bottom: 2px solid black;
   text-align: left;
   background-color: #FFF8BB;
+  overflow-x: hidden;
 }
 
 .delete-list {

@@ -18,7 +18,8 @@
     <add-release-view
       v-show="current_page === 'add'" 
       :library="library" 
-      @add-to-library="addToLibrary"/>
+      @add-to-library="addToLibrary"
+      @delete-library="deleteLibrary"/>
     <library-view 
       v-show="current_page === 'library'" 
       :library="library"
@@ -117,6 +118,13 @@ export default {
         this.collections = tempCollections;
         localStorage.storedCollections = JSON.stringify(this.collections)
       }
+    },
+
+    deleteLibrary(){
+      localStorage.removeItem('storedLibrary');
+      localStorage.removeItem('storedCollections');
+      this.library = [];
+      this.collections = [];
     },
 
     deleteRelease(id){

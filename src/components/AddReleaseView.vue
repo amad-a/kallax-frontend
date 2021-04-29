@@ -107,7 +107,7 @@ export default {
 
       const title = release.title;
       const artist = release.artist;
-      const search_request = `https://kallaxapp.herokuapp.com//search/?artist=${artist}&title=${title}`;
+      const search_request = `https://kallaxapp.herokuapp.com/search/?artist=${artist}&title=${title}`;
       const result = await fetch(search_request);
       let releaseData = await result.json();
       this.releases = []

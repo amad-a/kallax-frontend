@@ -125,7 +125,7 @@ p {
     text-align: left;
     padding: 5px;
     padding-left: 10px;
-    margin-top: 30px;
+    margin-top: 0px;
     font-size: 20px;
     font-family: 'IBM Plex Mono', monospace;
     font-weight: bold;
@@ -143,7 +143,6 @@ p {
     display: grid;
     gap: 5px;
     grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: 100%;
     padding: 12px;
     background-color: transparent;
 }

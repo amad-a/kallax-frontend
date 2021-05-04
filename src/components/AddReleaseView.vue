@@ -2,7 +2,6 @@
   <div>
     <search-form class="search" @search-submitted="addRelease"></search-form>
     <div class="outer-wrapper" v-if="releases.length !== 0">
-      <div class="blank">&nbsp;</div>
       <img class="cover-add" v-if="releases.length !== 0" :src="releases[displayed_release].img" >
       <div class="artist-add" v-if="releases.length !== 0">{{ releases[displayed_release].artist}}</div>
       <div class="release-add" v-if="releases.length !== 0">{{ releases[displayed_release].title}}</div>
@@ -11,29 +10,45 @@
       <button class="add" v-show="releases.length !== 0" @click="addToLibrary">add</button>
    </div>
    <div class="intro-wrapper" v-else>
-     kallax is a music library web app that utilizes the discogs api 
-     to allow you to compile … and give a real time feed of added music. 
-     it is built on the MEVN stack (mongodb, express, vue, and node js) 
-     and hosted on heroku. 
+     kallax is a music library web app that utilizes the Discogs API 
+     to allow you to compile and view a virtual collection of music using the most 
+     thorough music database out there.
+     it is built on the MEVN stack (mongodb, express, vue, and node js). 
      <br> &nbsp; <br>
-     app arose as a response to frustrations from the lack of (especially 
+     the app arose as a response to frustrations from the lack of (especially 
      older techno/dance records) on spotify and other commercial streaming 
      services, and an attempt to combine the unparalleled breadth of music 
-     on discogs and youtube, condensing it into a single interface. 
+     on Discogs and YouTube into a single, clean interface. 
      <br> &nbsp; <br>
      additionally, it is an homage to simple yet functional interfaces of 
-     ipod and mp3 players, and the practice of record collecting (kallax 
+     iPods and mp3 players of yesteryear, and the practice of record collecting (kallax 
      refers to kallax shelving unit from IKEA, a popular choice to house 
-     Vinyl among aspiring record collectors).
-
+     vinyl among aspiring record collectors).
+     
      <img src="kallax.png" alt="kallax">
-                <button @click="$emit('delete-library')">{{ check() }}</button>
+     <br> &nbsp; <br>
+     <p> kallax was created by <a class="link" href="https://amad.cool">amad ansari</a>,
+     and is a work in progress. if you run into any bugs or have suggestions for improvement, email
+     <a class="link" href="mailto: amad@nyu.edu">amad@nyu.edu</a>.</p>
 
      <h2>how-to-use:</h2>
+     <h3>search</h3>
+     you can search for releases using the search fields above. 
+     after searching, you can browse through results fetched by the discogs
+     API, and add them to your library with the 'add' button.
+     <h3>library</h3>
+     sort your library, and click on a release to view release info, cover, tracklist,
+     etc., find it on youtube, or delete it from your library. 
+     <h3>lists</h3>
+     create 'lists' (playlists, but for compiling whole releases rather than single tracks)
+     with releases added to your library, name them, and browse lists you have created.
+     <h3>explore</h3>
+     browse releases that other users of kallax have added, and add them to your own library.
+     <h3>delete library</h3>
+     <p>kallax locally stores your library and lists in browser data so it's saved whenever you exit and revisit
+     the page. press the button below to <b>permanently</b> delete your library and lists. this can't be undone!</p>
+     <button class="library-delete" @click="$emit('delete-library')">{{ check() }}</button>
      <br> &nbsp; <br>
-     
-     
-
    </div>
  </div>
 </template>
@@ -59,7 +74,6 @@ export default {
       releases: [],
       displayed_release: 0,
       error: false,
-      intro_message: "kallax is a music library app yada yada yada"
       }
   },
 
@@ -125,6 +139,10 @@ export default {
 
 <style>
 
+p {
+  margin-top: 0px;
+}
+
 .wrapper {
   display: grid;
   column-gap: 0px;
@@ -134,10 +152,9 @@ export default {
   border: 2px solid black;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: 100%;
   row-gap: 0px;
   padding-bottom: 40px;
-  padding-top: 20px;
+  padding-top: 40px;
   margin-top: 20px;
 }
 
@@ -150,6 +167,24 @@ export default {
   height: 60vh;
   margin-top: 20px;
   overflow-y: scroll;
+}
+
+.library-delete {
+  font-family: 'IBM Plex Mono', monospace;
+  border: 2px solid black;
+  background-color: transparent;
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.library-delete:hover {
+  cursor: pointer;
+  border: 2px solid black;
+  background-color: red;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
 }
 
 .cover-add {

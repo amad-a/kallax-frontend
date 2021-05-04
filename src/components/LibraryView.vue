@@ -21,9 +21,13 @@
 
     
       <div class="list-container">
-        <div class="empty-library" v-show="library.length === 0">
+        <div class="empty-library" v-show="library.length === 0 && option === 'library'">
             no releases added yet.
         </div>
+        <div class="empty-library" v-show="library.length === 0 && option === 'explore'">
+            loading...
+        </div>
+
         <div class="release-view" v-for="release in library" 
             :key="release.id" 
             @click="setRelease(release)">
